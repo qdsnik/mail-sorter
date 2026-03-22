@@ -1,2 +1,8 @@
 # vgb2-mail-service
 Service for handle attachments from any letters.
+
+```
+go mod tidy
+go build ./cmd/main.go
+```
+Add catalog `./astra/output` next to the executable file.

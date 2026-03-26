@@ -27,6 +27,13 @@ func main() {
 	flag.StringVar(&targetUrl, "targetUrl", "", "URL сервиса Джанго")
 	flag.Parse()
 
+	if targetUrl == "" {
+		fmt.Fprintln(os.Stderr, "Ошибка: флаг -targetUrl обязателен")
+		fmt.Fprintln(os.Stderr, "Использование:")
+		flag.Usage()
+		os.Exit(1)
+	}
+
 	// Инициализация каталогов.
 	cwd, err := os.Getwd()
 	if err != nil {

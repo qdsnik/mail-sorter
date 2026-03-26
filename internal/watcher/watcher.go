@@ -106,7 +106,8 @@ func sendAstraResponseFile(astraResponsePath string, targetURL string) error {
 	filename := filepath.Base(astraResponsePath)
 	extension := filepath.Ext(astraResponsePath)
 	nameWithoutExt := filename[:len(filename)-len(extension)]
-	targeURI, _ := url.JoinPath(targetURL, "/handle-response/", nameWithoutExt)
+	targeURI, _ := url.JoinPath(targetURL, "/automation/astra/handle-response/", nameWithoutExt)
+	fmt.Printf("POST %s", targeURI)
 	request, err := http.NewRequest("POST", targeURI, body)
 	if err != nil {
 		return err

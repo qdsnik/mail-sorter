@@ -1,25 +1,23 @@
 package views
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"path/filepath"
-	"log"
 	"strings"
 )
-
 
 // Перемещает файл из каталога А в каталог Б.
 func moveFile(source, destination string) error {
 	err := os.Rename(source, destination)
 	if err != nil {
-		return fmt.Errorf("ошибка перемещения файла: %w", err)
+		log.Println("ERROR: ошибка перемещения файла: ", err)
+		return err
 	}
-	fmt.Printf("Файл перемещён: %s → %s\n", source, destination)
+	log.Printf("INFO: Файл перемещён: %s → %s\n", source, destination)
 	return nil
 }
-
 
 // Возвращает количество файлов в указанном каталоге.
 func countFiles(path string) (int, error) {
@@ -37,9 +35,9 @@ func countFiles(path string) (int, error) {
 	return count, nil
 }
 
-
 // Представление для проверки отложенных файлов.
 func CheckDeferredFilesHandler(w http.ResponseWriter, r *http.Request) {
+	log.Println("INFO: [<--] Получен запрос на проверку отложенных файлов")
 	// Инициализация каталогов.
 	cwd, err := os.Getwd()
 	if err != nil {
@@ -53,6 +51,7 @@ func CheckDeferredFilesHandler(w http.ResponseWriter, r *http.Request) {
 	// Проверка наличия отложенных файлов.
 	filesQuantity, err := countFiles(deferredFileHandlingPath)
 	if err != nil {
+		log.Printf("ERROR: Ошибка при проверки отложенных файлов")
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
@@ -60,6 +59,7 @@ func CheckDeferredFilesHandler(w http.ResponseWriter, r *http.Request) {
 	if filesQuantity > 0 {
 		entries, err := os.ReadDir(deferredFileHandlingPath)
 		if err != nil {
+			log.Printf("ERROR: Ошибка проверки каталога ./astra/deferred/")
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
@@ -69,5 +69,7 @@ func CheckDeferredFilesHandler(w http.ResponseWriter, r *http.Request) {
 			dstFilePath := strings.Replace(srcFilePath, "/deferred/", "/input/", 1)
 			moveFile(srcFilePath, dstFilePath)
 		}
+	} else {
+		log.Printf("INFO: Каталог ./astra/deferred/ пуст")
 	}
 }

@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 	"path/filepath"
 	"vgb2-mail-service/internal/views"
 	"vgb2-mail-service/internal/watcher"
@@ -48,6 +49,7 @@ func main() {
 	if !isExists {
 		err := os.Mkdir(baseAstraPath, 0755)
 		if err != nil {
+			log.Printf("ошибка создания директории %s: %v", baseAstraPath, err)
 			panic(fmt.Errorf("ошибка создания директории %s: %w", baseAstraPath, err))
 		}
 		inputAstraPath := filepath.Join(baseAstraPath, "input")
@@ -65,6 +67,17 @@ func main() {
 			panic(fmt.Errorf("ошибка создания директории %s: %w", deferredFileHandlingPath, err))
 		}
 	}
+
+	// Настройка логирования в файл.
+	now := time.Now()
+	logFilename := fmt.Sprintf("app %s.log", now.Format("2006-01-02_150405"))
+	file, err := os.OpenFile(logFilename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+	// Устанавливаем файл как вывод для логгера
+	log.SetOutput(file)
 
 	go watcher.WatchDirectory(targetUrl, deferredFileHandlingPath)
 	fmt.Println(fmt.Sprintf("URL сервиса для обратной связи: %s", targetUrl))

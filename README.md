@@ -1,7 +1,7 @@
-# vgb2-mail-service
+# mail-sorter
 Service for handle attachments from any letters.
 
 ```
 go mod tidy
-go build -ldflags="-H=windowsgui" -o vgb2-mail-service ./cmd/main.go
+go build -ldflags="-H=windowsgui" -o mail-sorter ./cmd/main.go
 ```

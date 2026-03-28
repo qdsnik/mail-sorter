@@ -71,6 +71,7 @@ func main() {
 
 	http.HandleFunc("/checkAlive", views.CheckAliveHandler)
 	http.HandleFunc("/sendAstraRequest", views.ReceiveAstraRequestFileHandler)
+	http.HandleFunc("/checkDeferredAstraRequest", views.CheckDeferredFilesHandler)
 
 	fmt.Println("Веб‑сервер запущен на http://127.0.0.1:6566")
 	log.Fatal(http.ListenAndServe(":6566", nil))

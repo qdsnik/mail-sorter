@@ -8,8 +8,8 @@ import (
 	"os"
 	"time"
 	"path/filepath"
-	"vgb2-mail-service/internal/views"
-	"vgb2-mail-service/internal/watcher"
+	"mail-sorter/internal/views"
+	"mail-sorter/internal/watcher"
 )
 
 func isDirectoryExists(path string) (bool, error) {

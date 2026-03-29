@@ -1,4 +1,4 @@
-module vgb2-mail-service
+module mail-sorter
 
 go 1.22.2
 
